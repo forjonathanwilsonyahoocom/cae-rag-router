@@ -1,0 +1,5 @@
+numpy
+plotly
+matplotlib
+jupyter==1.1.1
+

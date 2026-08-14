@@ -1,0 +1,10 @@
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile_JUPYTER
+    network_mode: host
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/localjup/notebooks

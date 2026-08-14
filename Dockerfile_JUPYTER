@@ -1,0 +1,25 @@
+FROM python:3.12-slim as compiler
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app/
+
+RUN python -m venv /opt/venv
+# Enable venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY ./requirements_JUPYTER.txt /app/requirements.txt
+RUN  pip install --upgrade pip && pip install -Ur requirements.txt
+
+FROM python:3.12-slim as runner
+WORKDIR /app/
+COPY --from=compiler /opt/venv /opt/venv
+
+# Enable venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN mkdir -p /localjup/notebooks
+WORKDIR /localjup/notebooks
+ENV PYTHONPATH=/localjup/notebooks:/localjup/notebooks/app
+
+EXPOSE 8080
+
+CMD ["jupyter", "lab", "--allow-root", "--ip=0.0.0.0", "--port=8080", "--no-browser"]
